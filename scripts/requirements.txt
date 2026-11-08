@@ -1,0 +1,5 @@
+rembg[cpu]>=2.0.60
+pillow>=10.0
+numpy>=1.26
+opencv-python-headless>=4.8
+openpyxl>=3.1

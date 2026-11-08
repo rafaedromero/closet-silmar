@@ -1,0 +1,6 @@
+# Configuración mínima para desplegar funciones con la CLI de Supabase
+project_id = "closet-silmar"
+
+[functions.tasa-bcv]
+# La llama pg_cron con un secreto propio (x-cron-secreto), no con la sesión de un usuario
+verify_jwt = false

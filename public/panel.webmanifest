@@ -1,0 +1,17 @@
+{
+  "name": "Mi Closet · Panel de Silmar",
+  "short_name": "Mi Closet",
+  "description": "Administra las prendas de El Closet de Silmar",
+  "start_url": "/panel",
+  "scope": "/panel",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5efe6",
+  "theme_color": "#f5efe6",
+  "lang": "es",
+  "icons": [
+    { "src": "/iconos/panel-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/iconos/panel-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/iconos/panel-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

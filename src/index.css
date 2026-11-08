@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/*
+  El Closet de Silmar · tokens de diseño
+  Inspiración: boutique con paredes marfil, arcos, paneles acanalados,
+  barras doradas y luz cálida en nichos.
+  Día = tienda con luz natural. Noche = tienda con las luces encendidas.
+*/
+
+:root {
+  /* Superficies */
+  --fondo: #f5efe6;          /* marfil: paredes */
+  --superficie: #e8dfd2;     /* lino: interior del arco, tarjetas */
+  --superficie-2: #dcd1c1;   /* sombra del acanalado */
+  /* Texto */
+  --tinta: #1c1817;
+  --tinta-suave: #6b5e52;
+  /* Acentos */
+  --champan: #c8a46a;        /* barras, ganchos, marcos */
+  --oro-viejo: #9c7a3c;      /* sello de vendido, detalles de texto */
+  --rubor: #ebcfd0;          /* acento pequeño, me gusta */
+  --rubor-tinta: #8a4a52;    /* texto sobre rubor */
+  /* Sombra de la prenda colgada */
+  --sombra-prenda: rgba(60, 42, 30, 0.22);
+
+  --font-firma: "Allison", "Brush Script MT", cursive;
+  --font-texto: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="dia"]) {
+    --fondo: #1c1714;
+    --superficie: #2a221e;
+    --superficie-2: #352b26;
+    --tinta: #f3eadf;
+    --tinta-suave: #bfae98;
+    --champan: #d9b97e;
+    --oro-viejo: #e0c38c;
+    --rubor: #4a3536;
+    --rubor-tinta: #f0cfd1;
+    --sombra-prenda: rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-tema="noche"] {
+  --fondo: #1c1714;
+  --superficie: #2a221e;
+  --superficie-2: #352b26;
+  --tinta: #f3eadf;
+  --tinta-suave: #bfae98;
+  --champan: #d9b97e;
+  --oro-viejo: #e0c38c;
+  --rubor: #4a3536;
+  --rubor-tinta: #f0cfd1;
+  --sombra-prenda: rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* Los tokens disponibles como clases de Tailwind: bg-fondo, text-tinta, font-firma… */
+@theme inline {
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-superficie-2: var(--superficie-2);
+  --color-tinta: var(--tinta);
+  --color-tinta-suave: var(--tinta-suave);
+  --color-champan: var(--champan);
+  --color-oro-viejo: var(--oro-viejo);
+  --color-rubor: var(--rubor);
+  --color-rubor-tinta: var(--rubor-tinta);
+  --font-firma: var(--font-firma);
+  --font-texto: var(--font-texto);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--font-texto);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Panel acanalado, como el mostrador de la tienda */
+.acanalado {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--superficie) 0 8px,
+    var(--superficie-2) 8px 10px
+  );
+}
+
+/* Etiquetas en mayúsculas finas y espaciadas */
+.etiqueta {
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid var(--champan);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
