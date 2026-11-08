@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import ArcoPrenda from './ArcoPrenda'
 import { formatoRef } from '../lib/formato'
+import { IconoCorazon } from './Iconos'
 
 /**
  * Una prenda de la vitrina. Solo la de arriba se puede arrastrar.
@@ -9,7 +10,7 @@ import { formatoRef } from '../lib/formato'
  * rebota a su lugar, y si lo pasa sale disparada con la velocidad del dedo.
  */
 const Tarjeta = forwardRef(function Tarjeta(
-  { prenda, posicion, fisica: F, onDecision, onTocar },
+  { prenda, posicion, fisica: F, onDecision, onTocar, teGusta = false },
   ref,
 ) {
   const esTope = posicion === 0
@@ -113,6 +114,11 @@ const Tarjeta = forwardRef(function Tarjeta(
         >
           <div className="min-w-0">
             <p className="m-0 truncate font-medium">{prenda.nombre}</p>
+            {teGusta && !prenda.vendida && (
+              <p className="m-0 flex items-center gap-1 text-xs text-rubor-tinta">
+                <IconoCorazon className="h-3.5 w-3.5" relleno /> En tu selección
+              </p>
+            )}
             <p className="m-0 text-sm text-tinta-suave">
               {prenda.marca ? `${prenda.marca} · ` : ''}Talla {prenda.talla} · Ref {formatoRef(prenda.ref)}
             </p>

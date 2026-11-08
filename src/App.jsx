@@ -40,9 +40,9 @@ export default function App() {
   const tasa = tienda.datos?.tasa ?? null
   const datosDeEjemplo = import.meta.env.DEV && tienda.datos?.origen === 'ejemplo'
 
-  const { decisiones, decidir, olvidar } = useSeleccion()
+  const { decisiones, recorrido, decidir, recorrer, volverAVerTodo, empezarDeCero } = useSeleccion()
   const fila = useFilaEstable(prendas)
-  const pendientes = fila.filter((p) => !decisiones[p.id])
+  const pendientes = fila.filter((p) => !recorrido.has(p.id))
   const gustan = prendas.filter((p) => decisiones[p.id] === 'me_gusta' && !p.vendida).length
   const disponibles = prendas.filter((p) => !p.vendida).length
   const ficha = prendas.find((p) => p.id === fichaId)
@@ -76,10 +76,11 @@ export default function App() {
       const prenda = prendas.find((p) => p.id === id)
       decidir(id, prenda?.vendida ? 'visto' : tipo)
       if (!prenda?.vendida) registrar(id, tipo)
-      const quedan = fila.filter((p) => !decisiones[p.id] && p.id !== id).length
+      recorrer(id)
+      const quedan = fila.filter((p) => !recorrido.has(p.id) && p.id !== id).length
       if (quedan === 0) setTimeout(() => setRevision({ terminoFila: true }), 350)
     },
-    [decidir, decisiones, fila, prendas],
+    [decidir, recorrer, recorrido, fila, prendas],
   )
 
   // Decisión desde la ficha: si es la prenda de arriba, se cierra la ficha y la tarjeta sale volando
@@ -179,12 +180,15 @@ export default function App() {
               prendas={fila}
               fisica={fisica}
               decisiones={decisiones}
+              recorrido={recorrido}
               onDecidir={alDecidirEnVitrina}
               onTocar={(p) => {
                 setFichaId(p.id)
                 registrar(p.id, 'ficha')
               }}
               onRevisar={() => setRevision({ terminoFila: true })}
+              onVolverAVerTodo={volverAVerTodo}
+              onEmpezarDeCero={empezarDeCero}
               mostrarTutorial={tutorial}
               onFinTutorial={finTutorial}
               pausada={Boolean(ficha || revision)}
@@ -213,8 +217,13 @@ export default function App() {
               setFichaId(p.id)
               registrar(p.id, 'ficha')
             }}
-            onVerPasadas={() => {
-              olvidar('paso')
+            hayRecorrido={recorrido.size > 0}
+            onVolverAVerTodo={() => {
+              volverAVerTodo()
+              setRevision(null)
+            }}
+            onEmpezarDeCero={() => {
+              empezarDeCero()
               setRevision(null)
             }}
             onCerrar={() => setRevision(null)}

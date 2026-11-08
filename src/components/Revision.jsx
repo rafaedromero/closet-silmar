@@ -7,6 +7,7 @@ import { IconoCorazon, IconoPaso } from './Iconos'
 import { aBolivares, bs, conDescuento, fechaCorta, mejorDescuento, usd } from '../lib/dinero'
 import { armarMensaje, enlaceWhatsApp } from '../lib/whatsapp'
 import { registrar } from '../lib/eventos'
+import Reinicio from './Reinicio'
 
 /**
  * Revisión de la selección: lo que le gustó y lo que pasó.
@@ -22,7 +23,9 @@ export default function Revision({
   hayPendientes,
   onDecidir,
   onAbrir,
-  onVerPasadas,
+  hayRecorrido,
+  onVolverAVerTodo,
+  onEmpezarDeCero,
   onCerrar,
 }) {
   const [pestana, setPestana] = useState('me_gusta')
@@ -134,16 +137,18 @@ export default function Revision({
         )}
 
         <div className="flex flex-col items-center gap-2 pt-1">
-          {hayPendientes ? (
+          {hayPendientes && (
             <button type="button" onClick={onCerrar} className="text-sm text-tinta-suave underline underline-offset-4">
               Seguir mirando
             </button>
-          ) : (
-            pasadas.length > 0 && (
-              <button type="button" onClick={onVerPasadas} className="text-sm text-tinta-suave underline underline-offset-4">
-                Ver de nuevo las que pasé
-              </button>
-            )
+          )}
+          {(hayRecorrido || gustan.length + pasadas.length > 0) && (
+            <Reinicio
+              gustan={enviables.length}
+              mostrarVolver={hayRecorrido}
+              onVolverAVerTodo={onVolverAVerTodo}
+              onEmpezarDeCero={onEmpezarDeCero}
+            />
           )}
         </div>
       </div>

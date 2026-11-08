@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import Tarjeta from './Tarjeta'
 import Tutorial from './Tutorial'
 import { IconoCorazon, IconoPaso } from './Iconos'
+import Reinicio from './Reinicio'
 import { precargar } from '../lib/precarga'
 import { registrar } from '../lib/eventos'
 
@@ -11,11 +12,11 @@ import { registrar } from '../lib/eventos'
  * Derecha = me gusta, izquierda = paso. La prenda actual es la primera sin decidir.
  */
 const Vitrina = forwardRef(function Vitrina(
-  { prendas, fisica, decisiones, onDecidir, onTocar, onRevisar, mostrarTutorial = false, onFinTutorial, pausada = false },
+  { prendas, fisica, decisiones, recorrido, onDecidir, onTocar, onRevisar, onVolverAVerTodo, onEmpezarDeCero, mostrarTutorial = false, onFinTutorial, pausada = false },
   ref,
 ) {
   const fila = prendas // ya llega en el orden de la vitrina
-  const pendientes = fila.filter((p) => !decisiones[p.id])
+  const pendientes = fila.filter((p) => !recorrido.has(p.id))
   const indice = fila.length - pendientes.length
   const tarjetas = useRef({})
   const ocupado = useRef(false)
@@ -84,7 +85,12 @@ const Vitrina = forwardRef(function Vitrina(
         style={{ aspectRatio: '3 / 4.9' }}
       >
         {terminado ? (
-          <FinDeFila onRevisar={onRevisar} />
+          <FinDeFila
+            onRevisar={onRevisar}
+            gustan={prendas.filter((p) => decisiones[p.id] === 'me_gusta' && !p.vendida).length}
+            onVolverAVerTodo={onVolverAVerTodo}
+            onEmpezarDeCero={onEmpezarDeCero}
+          />
         ) : (
           visibles
             .map((prenda, i) => (
@@ -95,6 +101,7 @@ const Vitrina = forwardRef(function Vitrina(
                   else delete tarjetas.current[prenda.id]
                 }}
                 prenda={prenda}
+                teGusta={decisiones[prenda.id] === 'me_gusta'}
                 posicion={i}
                 fisica={fisica}
                 onDecision={alDecidir}
@@ -146,7 +153,7 @@ function BotonRedondo({ etiqueta, acento = false, onClick, children }) {
   )
 }
 
-function FinDeFila({ onRevisar }) {
+function FinDeFila({ onRevisar, gustan, onVolverAVerTodo, onEmpezarDeCero }) {
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-center gap-4 border border-champan bg-superficie px-8 text-center"
@@ -163,6 +170,7 @@ function FinDeFila({ onRevisar }) {
       >
         Revisar mi selección
       </button>
+      <Reinicio gustan={gustan} onVolverAVerTodo={onVolverAVerTodo} onEmpezarDeCero={onEmpezarDeCero} />
     </motion.div>
   )
 }
